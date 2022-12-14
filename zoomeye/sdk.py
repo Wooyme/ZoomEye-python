@@ -146,7 +146,8 @@ class ZoomEye:
         else:
             headers = {}
         # add user agent
-        headers["User-Agent"] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36"
+        headers[
+            "User-Agent"] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36"
         return headers
 
     def login(self):
@@ -163,7 +164,7 @@ class ZoomEye:
         else:
             return result
 
-    def dork_search(self, dork, page=0, resource="host", facets=None):
+    def dork_search(self, dork, page=0, resource="host", facets=None, sub_type='v4'):
         """
         Search records with ZoomEye dorks.
         param: dork
@@ -176,6 +177,8 @@ class ZoomEye:
         param: facet
                ex: [app, device]
                A comma-separated list of properties to get summary information
+        param: sub_type
+            v4,v6
         """
 
         result = []
@@ -183,8 +186,10 @@ class ZoomEye:
         search_api = self.search_api.format(resource)
         if isinstance(facets, (tuple, list)):
             facets = ','.join(facets)
+        if isinstance(sub_type, (tuple, list)):
+            sub_type = ','.join(sub_type)
         headers = self._check_header()
-        params = {'query': dork, 'page': page, 'facets': facets}
+        params = {'query': dork, 'page': page, 'facets': facets,'sub_type':sub_type}
         resp = self._request(search_api, params=params, headers=headers)
         if resp and "matches" in resp:
             matches = resp.get('matches')
@@ -197,7 +202,7 @@ class ZoomEye:
         return result
 
     def multi_page_search(self, dork, page=1, resource="host",
-                          facets=None) -> list:
+                          facets=None, sub_type='v4') -> list:
         """
         mainly used to search dork data from zoomeye data.
         please see: https://www.zoomeye.org/doc#host-search and
@@ -216,6 +221,8 @@ class ZoomEye:
                      supported :'app', 'device', 'service', 'os', 'port', 'country', 'city'
                      tips:the data returned by the app is contained in the product
                         other data are corresponding
+        :param sub_type: list or tuple
+                v4,v6
         :return: json data
         """
         self.search_type = resource
@@ -228,8 +235,9 @@ class ZoomEye:
         for i in range(page):
             if isinstance(facets, (tuple, list)):
                 facets = ','.join(facets)
-
-            params = {'query': dork, 'page': i + 1, 'facets': facets}
+            if isinstance(sub_type, (tuple, list)):
+                sub_type = ','.join(sub_type)
+            params = {'query': dork, 'page': i + 1, 'facets': facets, 'sub_type': sub_type}
             result = self._request(search_api, params=params, headers=headers)
             if result and "matches" in result:
                 self.total = result.get("total")
@@ -373,7 +381,6 @@ class ZoomEye:
         except Exception as e:
             return False, e
         return True, "successful! saving in {}".format(os.getcwd())
-
 
 
 def show_site_ip(data):

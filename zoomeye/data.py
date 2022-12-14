@@ -335,13 +335,13 @@ class Cache:
 
 class CliZoomEye:
 
-    def __init__(self, dork, num, resource, facet=None, force=False):
+    def __init__(self, dork, num, resource, facet=None, force=False,sub_type='v4'):
         self.dork = dork
         self.num = num
         self.resource = resource
         self.facet = facet
         self.force = force
-
+        self.sub_type = sub_type
         self.dork_data = list()
         self.facet_data = None
         self.total = 0
@@ -366,7 +366,8 @@ class CliZoomEye:
                             dork=self.dork,
                             page=1,
                             resource=self.resource,
-                            facets=self.facet
+                            facets=self.facet,
+                            sub_type=self.sub_type
                         )
                         self.num = self.zoomeye.total
                         cache = Cache(self.dork, page=1, resource=self.resource)
@@ -409,7 +410,8 @@ class CliZoomEye:
                             dork=self.dork,
                             page=page + 1,
                             resource=self.resource,
-                            facets=self.facet
+                            facets=self.facet,
+                            sub_type=self.sub_type
                         )
                     except ValueError:
                         print("the access token expires, please re-run [zoomeye init] command."
