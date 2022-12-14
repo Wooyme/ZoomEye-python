@@ -189,7 +189,7 @@ class ZoomEye:
         if isinstance(sub_type, (tuple, list)):
             sub_type = ','.join(sub_type)
         headers = self._check_header()
-        params = {'query': dork, 'page': page, 'facets': facets,'sub_type':sub_type}
+        params = {'query': dork, 'page': page, 'facets': facets,'sub_type':'sub_type:'+sub_type}
         resp = self._request(search_api, params=params, headers=headers)
         if resp and "matches" in resp:
             matches = resp.get('matches')
