@@ -105,8 +105,9 @@ def search(args):
     figure = args.figure
     force = args.force
     resource = args.type
+    sub_type = args.sub_type
 
-    cli_zoom = CliZoomEye(dork, num, resource=resource, facet=facet, force=force)
+    cli_zoom = CliZoomEye(dork, num, resource=resource, facet=facet, force=force,sub_type=sub_type)
     if filters:
         cli_zoom.filter_data(filters, save)
         return

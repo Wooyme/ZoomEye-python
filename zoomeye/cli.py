@@ -148,6 +148,15 @@ def main():
         ),
         action="store_true"
     )
+    parser_search.add_argument(
+        "-sub_type",help=(
+            """
+            v4,v6
+            """
+        ),
+        choices=('v4','v6'),
+        default='v4'
+    )
     parser_search.set_defaults(func=core.search)
 
     # initial account configuration related commands
